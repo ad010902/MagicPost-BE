@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const dbConfig = require("./config/db.config");
+//const cookieSession = require("cookie-session");
 
 const app = express();
 
@@ -16,9 +17,18 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+// app.use(
+//   cookieSession({
+//     name: "bezkoder-session",
+//     keys: ["COOKIE_SECRET"], // should use as secret environment variable
+//     httpOnly: true,
+//     sameSite: "strict",
+//   })
+// );
 
 const db = require("./models");
 const Role = db.role;
+//db.sequelize.sync();
 
 db.mongoose
   .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
@@ -40,8 +50,11 @@ db.mongoose
 //});
 
 // routes
-require("./routes/auth.routes")(app);
-require("./routes/user.routes")(app);
+require("./routes/auth.route")(app);
+//require("./routes/user.route")(app);
+//require("./routes/gatheringLocation.route")(app);
+// require("./routes/transactionLocation.route")(app);
+//require("./routes/order.route")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -49,38 +62,34 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-/*function initial() {
-    Role.collection.estimatedDocumentCount((err, count) => {
-        if (!err && count === 0) {
-            new Role({
-                name: "user"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
+// function initial() {
+//   Role.create({
+//     id: 1,
+//     name: "user",
+//   });
 
-                console.log("added 'user' to roles collection");
-            });
+//   Role.create({
+//     id: 2,
+//     name: "staffGather",
+//   });
 
-            new Role({
-                name: "moderator"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
+//   Role.create({
+//     id: 3,
+//     name: "managerGather",
+//   });
 
-                console.log("added 'moderator' to roles collection");
-            });
+//   Role.create({
+//     id: 4,
+//     name: "staffTrans",
+//   });
 
-            new Role({
-                name: "admin"
-            }).save(err => {
-                if (err) {
-                    console.log("error", err);
-                }
+//   Role.create({
+//     id: 5,
+//     name: "managerTrans",
+//   });
 
-                console.log("added 'admin' to roles collection");
-            });
-        }
-    });
-}*/
+//   Role.create({
+//     id: 6,
+//     name: "admin",
+//   });
+// }

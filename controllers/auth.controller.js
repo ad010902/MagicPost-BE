@@ -1,13 +1,14 @@
 const db = require("../models");
-const config = require("../auth.config");
+const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+// const hashGenK = bcrypt.genSalt(8);
 
 exports.signup = (req, res) => {
-  const User = new User({
+  const user = new User({
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
@@ -36,18 +37,19 @@ exports.signup = (req, res) => {
               res.status(500).send({ message: err });
               return;
             }
+
             res.send({ message: "User was registered successfully!" });
           });
         }
       );
     } else {
-      //có phải tìm ra đúng name = "user", hay hàm này rốt cuộc là có ý nghĩa gì
       Role.findOne({ name: "user" }, (err, role) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
         }
-        user.roles = [roles._id];
+
+        user.roles = [role._id];
         user.save((err) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -102,7 +104,7 @@ exports.signin = (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        roles: authorities, //?????????? van de o day la gi z
+        roles: authorities,
         message: "Signin successfully!",
       });
     });
@@ -116,4 +118,12 @@ exports.signout = async (req, res) => {
   } catch (err) {
     this.next(err); //tai sao ko để là this.next() == null
   }
+};
+
+exports.isUser = (req, res) => {
+  res.status(200).send("User Board.");
+};
+
+exports.isAdmin = (req, res) => {
+  res.status(200).send("Admin Board.");
 };

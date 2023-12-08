@@ -1,6 +1,8 @@
 // Tạo API tạo người nhân viên để quản lý, tạo nhân viên ở điểm giao dịch, điểm tập kết
 const db = require("../models");
 const GatheringLocation = db.GatheringLocation;
+const Order = db.Order;
+
 //const Role = db.role;
 
 exports.createGather = (req, res) => {

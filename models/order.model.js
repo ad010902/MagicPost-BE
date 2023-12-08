@@ -7,6 +7,8 @@ const Order = mongoose.model(
       idOrder: String,
       name: String,
       tilte: String,
+      addressIfR: String,
+      addressIfS: String,
       receiveIf: [
         {
           type: mongoose.Schema.Types.ObjectId,
@@ -26,6 +28,7 @@ const Order = mongoose.model(
             type: Date,
             default: Date.now,
           },
+          statusTransS: Boolean,
           transLocaStartName: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "TransactionLocation",
@@ -39,6 +42,7 @@ const Order = mongoose.model(
             type: Date,
             default: Date.now,
           },
+          statusTransF: Boolean,
           transLocaStartName: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "TransactionLocation",
@@ -52,6 +56,7 @@ const Order = mongoose.model(
             type: Date,
             default: Date.now,
           },
+          statusGatherS: Boolean,
           gatherLocaStartName: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "GatheringLocation",
@@ -59,28 +64,27 @@ const Order = mongoose.model(
         },
       ],
 
-      gatherLocaStart: [
+      gatherLocaEnd: [
         {
-          timeTransStart: {
+          timeGatherEnd: {
             type: Date,
             default: Date.now,
           },
-          transLocaStartName: {
+          statusGatherF: Boolean,
+          gatherLocaEndName: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "TransactionLocation",
+            ref: "GatheringLocation",
           },
         },
       ],
       typeOrder: String,
-      //Noi dung la gi
-      status: String,
-      //Chuyen den dau, gui ve
       contentValue: String,
+      describeOrder: String,
       specialService: String,
       timeReceive: String, // Đi tìm kiểu dữ liệu của time.
       price: Number, //Kiểu number trong js có được dùng thập phân, nó có thể chạy được từ đâu đến đâu
       paided: Number,
-      status: String,
+      isDeliveSuccess: Boolean,
     },
     { timestamps: true }
   )

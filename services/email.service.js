@@ -1,42 +1,41 @@
 const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
-dotenv.config();
-var inlineBase64 = require("nodemailer-plugin-inline-base64");
 
-const sendEmailCreateOrder = async (email, orderItems) => {
-  let transporter = nodemailer.createTransport({
+exports.createEmail = (req, res) => {
+  var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
-    secure: true, // true for 465, false for other ports
+    secure: true,
+    // Xem lai auth la nhu the nao??
     auth: {
-      user: process.env.MAIL_ACCOUNT, // generated ethereal user
-      pass: process.env.MAIL_PASSWORD, // generated ethereal password
+      user: "thuyhanguyen973@gmail.com",
+      pass: "ucav qzvz mvkx apni",
+    },
+    tls: {
+      //do not fail on invalid certs
+      rejectUnauthorized: false,
     },
   });
-  transporter.use("compile", inlineBase64({ cidPrefix: "somePrefix_" }));
+  var content = "";
+  content += `
+            <div style="padding: 10px; background-color: #003375">
+            <div style="padding: 10px; background-color: white;">
+                <h4 style="color: #0085ff">Gửi mail với nodemailer và express</h4>
+                <span style="color: black">Đây là mail test</span>
+            </div>
+        </div>`;
+  var mainOptions = {
+    from: "thuyhanguyen973@gmail.com",
+    to: req.body.email,
+    subject: "Test Nodemailer",
+    text: "Your text is here",
+    html: content,
+  };
 
-  let listItem = "";
-  const attachImage = [];
-  orderItems.forEach((order) => {
-    listItem += `<div>
-    <div>
-      Bạn đã đặt sản phẩm <b>${order.name}</b> với số lượng: <b>${order.amount}</b> và giá là: <b>${order.price} VND</b></div>
-      <div>Bên dưới là hình ảnh của sản phẩm</div>
-    </div>`;
-    attachImage.push({ path: order.image });
+  transporter.sendMail(mainOptions, function (err, info) {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      res.status(200).send("Message sent: " + info.response);
+    }
   });
-
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: process.env.MAIL_ACCOUNT, // sender address
-    to: email, // list of receivers
-    subject: "Bạn đã đặt hàng tại shop LẬP trình thật dễ", // Subject line
-    text: "Hello world?", // plain text body
-    html: `<div><b>Bạn đã đặt hàng thành công tại shop Lập trình thật dễ</b></div> ${listItem}`,
-    attachments: attachImage,
-  });
-};
-
-module.exports = {
-  sendEmailCreateOrder,
 };
