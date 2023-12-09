@@ -1,7 +1,7 @@
 // Tạo API tạo người nhân viên để quản lý, tạo nhân viên ở điểm giao dịch, điểm tập kết
 const db = require("../models");
-const GatheringLocation = db.GatheringLocation;
-const Order = db.Order;
+const GatheringLocation = db.gatheringLocation;
+const Order = db.order;
 
 //const Role = db.role;
 
@@ -15,6 +15,8 @@ exports.createGather = (req, res) => {
   //create a gatheringLocation
   const gatheringLocation = new GatheringLocation({
     nameGather: req.body.nameGather,
+    phone: req.body.phone,
+    email: req.body.email,
     managerNameGather: req.body.managerNameGather,
   });
 
@@ -135,7 +137,7 @@ exports.deleteAllGather = (req, res) => {
 //show all Gathering Location
 exports.showAllGatherLoca = (req, res) => {
   GatheringLocation.find()
-    .then((users) => res.json(users))
+    .then((data) => res.json(data))
     .catch((err) => res.json(err));
 };
 // Find all theo role

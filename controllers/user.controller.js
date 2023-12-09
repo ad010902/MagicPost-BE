@@ -52,8 +52,7 @@ exports.createUser = (req, res) => {
   });
 
   //Save new user
-  user
-    .save(user)
+  User.save(user)
     .then((data) => {
       res.send(data);
     })

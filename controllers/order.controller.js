@@ -10,9 +10,9 @@ const TransactionLocation = db.TransactionLocation;
 exports.createOrderOrigin = (req, res) => {
   //Valid request
   /*if (!req.body.nameGather) {
-                                                res.status(400).send({ message: "Content can not be empty!" });
-                                                return;
-                                              }*/
+                                                                res.status(400).send({ message: "Content can not be empty!" });
+                                                                return;
+                                                              }*/
   //create a order
   const order = new Order({
     idOrder: req.body.String,
@@ -35,7 +35,8 @@ exports.createOrderOrigin = (req, res) => {
   });
 
   //Save new order
-  Order.save(order)
+  order
+    .save(order)
     .then((data) => {
       res.send(data);
     })
@@ -46,15 +47,6 @@ exports.createOrderOrigin = (req, res) => {
           "Some error ocurred while creating the gathering Location.",
       });
     });
-
-  if (order) {
-    EmailService.sendEmailCreateOrder();
-    resolve({
-      status: "OK",
-      message: "sucess",
-    });
-    TransactionLocation.findByIdAndUpdate;
-  }
   // Automaticly update count after changing and creating
   // const id = req.params._id;
   // TransactionLocation.findByIdAndUpdate(
@@ -76,9 +68,15 @@ exports.createOrderToGatherS = (req, res) => {
   }
 
   const orderGatherS = new Order({
-    transLocaEnd: req.body.transLocaEnd,
+    idOrder: req.name.idOrder,
+    name: req.body.name,
+    title: req.body.title,
+    transLocaEndName: req.body.transLocaEndName,
+    gatherLocaStartName: req.body.gatherLocaStartName,
+    statusGatherS: req.body.statusGatherS,
   });
-  Order.save(orderGatherS)
+  orderGatherS
+    .save(orderGatherS)
     .then((data) => {
       res.send(data);
     })
@@ -88,13 +86,35 @@ exports.createOrderToGatherS = (req, res) => {
           err.message || "Some error ocurred while creating order to gatherEnd",
       });
     });
-
-  if (orderGatherS) {
-    res.status(400);
-  }
 };
 
-exports.createOrderToGatherF = (req, res) => {};
+exports.createOrderToGatherF = (req, res) => {
+  if (!req.body.name) {
+    res.status(400).send({ message: "Order can be empty!" });
+    return;
+  }
+
+  const orderToGatherF = new Order({
+    idOrder: req.name.isOrder,
+    name: req.body.name,
+    title: req.body.title,
+    gatherLocaStartName: req.body.gatherLocaStartName,
+    gatherLocaEndName: req.body.gatherLocaEndName,
+    statusGatherF: req.body.statusGatherF,
+  });
+
+  //
+  orderToGatherF
+    .save(orderToGatherF)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error ocurred while creating order",
+      });
+    });
+};
 
 // Create order to TransF (diem dau)
 exports.createOrderToTransF = (req, res) => {
@@ -105,17 +125,18 @@ exports.createOrderToTransF = (req, res) => {
   }
 
   //create a Order to startTransaction
-  const Order = new Order({
+  const order = new Order({
     idOrder: req.body.idOrder,
-    content: req.body.content,
+    title: req.body.title,
     name: req.body.name,
-    transLocaStart: req.body.transLocaStart,
-    gatherLocaStart: req.body.gatherLocaStart,
-    status: req.body.status,
+    gatherLocaEndName: req.body.gatherLocaEndName,
+    transLocaEndName: req.body.transLocaEndName,
+    statusTransF: req.body.statusTransF,
   });
 
   //Save new order
-  Order.save(order)
+  order
+    .save(order)
     .then((data) => {
       res.send(data);
     })
@@ -254,12 +275,12 @@ exports.countOrderTransSuccessGatherNext = (req, res) => {
     });
   }
 };
-exports.countOrderGatherSend = (req, res) => {
-  try {
-    const condition = {};
-  } catch (err) {}
-};
-exports.countOrderGatherReceive;
+// exports.countOrderGatherSend = (req, res) => {
+//   try {
+//     const condition = {};
+//   } catch (err) {}
+// };
+// exports.countOrderGatherReceive;
 exports.countOrderReceive = (req, res) => {
   try {
     const condition = { statusTransS: true };
@@ -271,7 +292,7 @@ exports.countOrderReceive = (req, res) => {
     });
   }
 };
-exports.countOrderSend;
+// exports.countOrderSend;
 
 //Đếm số lượng hàng nhận đc == sô lượng transStart true, gatherStart true
 

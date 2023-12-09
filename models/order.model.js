@@ -43,7 +43,7 @@ const Order = mongoose.model(
             default: Date.now,
           },
           statusTransF: Boolean,
-          transLocaStartName: {
+          transLocaEndName: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "TransactionLocation",
           },
