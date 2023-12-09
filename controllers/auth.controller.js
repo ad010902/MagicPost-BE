@@ -93,7 +93,7 @@ exports.signin = (req, res) => {
       const token = jwt.sign({ id: user.id }, config.secret, {
         algorithm: "HS256",
         allowInsecureKeySizes: true,
-        expiresIn: 86400, // 24 hours nhung chua duoc hoat dong hieu qua
+        expiresIn: 86400, //
       });
 
       var authorities = [];
@@ -112,11 +112,11 @@ exports.signin = (req, res) => {
 
 exports.signout = async (req, res) => {
   try {
-    //sao req.session = null nhi
+    //
     req.session = null;
     return res.status(200).send({ message: "You've been signed out!" });
   } catch (err) {
-    this.next(err); //tai sao ko để là this.next() == null
+    this.next(err); //
   }
 };
 
