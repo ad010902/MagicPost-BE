@@ -1,4 +1,4 @@
-const authJwt = require("../middlewares");
+const { authJWT } = require("../middlewares");
 const controlUser = require("../controllers/user.controller");
 
 module.exports = function (app) {
@@ -9,79 +9,79 @@ module.exports = function (app) {
 
   app.get("/api/test/all/", controlUser.allAccess);
 
-  app.get("/api/test/user/", [authJwt.verifyToken], controlUser.userBoard);
+  app.get("/api/test/user/", [authJWT.verifyToken], controlUser.userBoard);
 
   app.get(
     "/api/test/staffGather/",
-    [authJwt.verifyToken, authJwt.isStaffGather],
+    [authJWT.verifyToken, authJWT.isStaffGather],
     controlUser.staffGatherBoard
   );
 
   app.get(
     "/api/test/managerGather/",
-    [authJwt.verifyToken, authJwt.isManagerGather],
+    [authJWT.verifyToken, authJWT.isManagerGather],
     controlUser.isManagerGather
   );
 
   app.get(
     "/api/test/staffTrans/",
-    [authJwt.verifyToken, authJwt.isStaffTrans],
+    [authJWT.verifyToken, authJWT.isStaffTrans],
     controlUser.staffTransBoard
   );
 
   app.get(
     "/api/test/managerTrans/",
-    [authJwt.verifyToken, authJwt.isManagerTrans],
+    [authJWT.verifyToken, authJWT.isManagerTrans],
     controlUser.managerTransBoard
   );
 
   app.get(
     "/api/test/admin/",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJWT.verifyToken, authJWT.isAdmin],
     controlUser.adminBoard
   );
 
   app.get(
     "/api/admin/showAllUsers/",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJWT.verifyToken, authJWT.isAdmin],
     controlUser.showAllUser
   );
 
   app.get(
     "/api/staffTrans/:name",
-    [auth.verifyToken, authJwt.authJwt.isManagerTrans],
+    [authJWT.verifyToken, authJWT.authJwt.isManagerTrans],
     controlUser.findAllStaffTrans
   );
 
   app.get(
     "/api/staffGather/:name",
-    [authJwt.verifyToken, authJwt.isManagerGather],
+    [authJWT.verifyToken, authJWT.isManagerGather],
     controlUser.findAllStaffGather
   );
 
-  app.post("/api/createUser", [authJwt.verifyToken], controlUser.createUser);
+  app.post("/api/createUser", [authJWT.verifyToken], controlUser.createUser);
 
   app.delete(
     "/api/deleteUser/:_id",
-    [authJwt.verifyToken],
+    [authJWT.verifyToken],
     controlUser.deleteUser
   );
 
   app.delete(
     "/api/deleteAllUser/",
-    [authJwt.verifyToken],
+    [authJWT.verifyToken],
     controlUser.deleteAll
   );
 
   app.put(
     "/api/updateUser/:_id",
-    [authJwt.verifyToken],
+    [authJWT.verifyToken],
     controlUser.updateUser
   );
 
   app.get(
     "/api/searchUser/:_id",
-    [authJwt.verifyToken],
+    [authJWT.verifyToken],
     controlUser.findOneUser
   );
 };
