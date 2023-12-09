@@ -10,9 +10,9 @@ const TransactionLocation = db.TransactionLocation;
 exports.createOrderOrigin = (req, res) => {
   //Valid request
   /*if (!req.body.nameGather) {
-                                          res.status(400).send({ message: "Content can not be empty!" });
-                                          return;
-                                        }*/
+                                            res.status(400).send({ message: "Content can not be empty!" });
+                                            return;
+                                          }*/
   //create a order
   const order = new Order({
     idOrder: req.body.String,
@@ -261,7 +261,11 @@ exports.countOrderReceive = (req, res) => {
     const condition = { statusTransS: true };
     const countOrderReceive = Order.countDocuments(condition);
     res.send(200).send(countOrderReceive);
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error countOrderReceive",
+    });
+  }
 };
 exports.countOrderSend;
 
