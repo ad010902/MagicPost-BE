@@ -52,7 +52,7 @@ db.mongoose
 // routes
 require("./routes/auth.route")(app);
 //require("./routes/user.route")(app);
-//require("./routes/gatheringLocation.route")(app);
+require("./routes/gatheringLocation.route")(app);
 // require("./routes/transactionLocation.route")(app);
 //require("./routes/order.route")(app);
 

@@ -11,11 +11,12 @@ module.exports = function (app) {
 
   app.get("/api/gatherLoca/showAlGather", controlGather.showAllGatherLoca);
 
+  // Search findOne
   app.get("/api/gatherLoca/findOne/:_id", controlGather.findOneGather);
 
   app.delete("/api/gatherLoca/deleteAll", controlGather.deleteAllGather);
 
   app.delete("/api/gatherLoca/deleteOne/:_id", controlGather.deleteGather);
 
-  app.put("/api/transLoca/update/:_id", controlGather.updateGather);
+  app.put("/api/gatherLoca/update/:_id", controlGather.updateGather);
 };
