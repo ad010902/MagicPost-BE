@@ -60,11 +60,7 @@ exports.findOneGather = (req, res) => {
 
   GatheringLocation.findById(id)
     .then((data) => {
-      if (!data)
-        res
-          .status(404)
-          .send({ message: "Not found Gathering Location with id" + id });
-      else res.send(data);
+      res.status(200).send(data);
     })
     .catch((err) => {
       res
@@ -82,7 +78,7 @@ exports.updateGather = (req, res) => {
   }
 
   const id = req.params._id;
-  GatheringLocation.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  GatheringLocation.findByIdAndUpdate(id, { useFindAndModify: false })
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Not found gathering with id" + id });
@@ -136,7 +132,8 @@ exports.deleteAllGather = (req, res) => {
 
 //show all Gathering Location
 exports.showAllGatherLoca = (req, res) => {
-  GatheringLocation.find()
+  const keyword = req.query.keyword ?? "";
+  GatheringLocation.find({ nameGather: { $regex: keyword } })
     .then((data) => res.json(data))
     .catch((err) => res.json(err));
 };
