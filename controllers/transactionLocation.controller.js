@@ -14,8 +14,10 @@ exports.createTransactionLocation = (req, res) => {
   //create a transactionLocation
   const transactionLocation = new TransactionLocation({
     nameTrans: req.body.nameTrans,
-    managerNameTrans: req.body.managerNameTrans,
-    gatherLocation: req.body.gatherLocation,
+    phone: req.body.phone,
+    email: req.body.email,
+    managerTransName: req.body.managerTransName,
+    gatherLocationName: req.body.gatherLocationName,
   });
 
   //Save new transactionLocation

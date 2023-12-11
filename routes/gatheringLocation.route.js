@@ -11,7 +11,6 @@ module.exports = function (app) {
 
   app.get("/api/gatherLoca/showAlGather", controlGather.showAllGatherLoca);
 
-  // Search findOne
   app.get("/api/gatherLoca/findOne/:_id", controlGather.findOneGather);
 
   app.delete("/api/gatherLoca/deleteAll", controlGather.deleteAllGather);

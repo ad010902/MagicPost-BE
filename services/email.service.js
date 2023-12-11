@@ -5,7 +5,7 @@ exports.createEmail = (req, res) => {
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
-    // Xem lai auth la nhu the nao??
+    //
     auth: {
       user: "thuyhanguyen973@gmail.com",
       pass: "ucav qzvz mvkx apni",
