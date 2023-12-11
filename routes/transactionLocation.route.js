@@ -7,6 +7,11 @@ module.exports = function (app) {
     next();
   });
 
+  app.post(
+    "/api/transLoca/createTransLoca",
+    [authJWT.verifyToken, authJWT.isAdmin, authJWT.isManagerGather],
+    controlTrans.createTransactionLocation
+  );
   app.get(
     "/api/transLoca/showAlTrans/",
     [authJWT.verifyToken, authJWT.isAdmin, authJWT.isManagerGather],
