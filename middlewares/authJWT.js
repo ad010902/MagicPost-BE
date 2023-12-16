@@ -5,213 +5,219 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-    let token = req.headers["x-access-token"];
+  //let token = req.headers["x-access-token"];
+  let token = req.session.token;
 
-    if (!token) {
-        return res.status(403).send({ message: "No token provided!" });
+  if (!token) {
+    return res.status(403).send({ message: "No token provided!" });
+  }
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
     }
-
-    jwt.verify(token, config.secret, (err, decoded) => {
-        if (err) {
-            return res.status(401).send({
-                message: "Unauthorized!",
-            });
-        }
-        //???
-        req.userId = decoded.id;
-        next();
-    });
+    //???
+    req.userId = decoded.id;
+    next();
+  });
 };
 
 isAdmin = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: {
+          $in: user.roles,
+        },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: {
-                    $in: user.roles,
-                },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
-                for (let i = 0; i < roles.length; i++) {
-                    if (role[i].name === "admin") {
-                        next();
-                        return;
-                    }
-                }
+        if (role.name === "admin") {
+          next();
+          return;
+        }
 
-                res.status(403).send({ message: "Require Admin Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require Admin Role!" });
+        return;
+      }
+    );
+  });
 };
 
 isManagerTrans = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: { $in: user.roles },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "managerTrans") {
+            next();
+            return;
+          }
+        }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "managerTrans") {
-                        next();
-                        return;
-                    }
-                }
-
-                res.status(403).send({ message: "Require ManagerTrans Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require ManagerTrans Role!" });
+        return;
+      }
+    );
+  });
 };
 
 isStaffTrans = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: { $in: user.roles },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "staffTrans") {
+            next();
+            return;
+          }
+        }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "staffTrans") {
-                        next();
-                        return;
-                    }
-                }
-
-                res.status(403).send({ message: "Require StaffTrans Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require StaffTrans Role!" });
+        return;
+      }
+    );
+  });
 };
 
 isManagerGather = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: { $in: user.roles },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "managerGather") {
+            next();
+            return;
+          }
+        }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "managerGather") {
-                        next();
-                        return;
-                    }
-                }
-
-                res.status(403).send({ message: "Require ManagerGather Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require ManagerGather Role!" });
+        return;
+      }
+    );
+  });
 };
 
 isUser = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: { $in: user.roles },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "user") {
+            next();
+            return;
+          }
+        }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "user") {
-                        next();
-                        return;
-                    }
-                }
-
-                res.status(403).send({ message: "Require User Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require User Role!" });
+        return;
+      }
+    );
+  });
 };
 
 isStaffGather = (req, res, next) => {
-    User.findById(req.userId).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    Role.find(
+      {
+        _id: { $in: user.roles },
+      },
+      (err, roles) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          res.status(500).send({ message: err });
+          return;
         }
 
-        Role.find({
-                _id: { $in: user.roles },
-            },
-            (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "staffGather") {
+            next();
+            return;
+          }
+        }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "staffGather") {
-                        next();
-                        return;
-                    }
-                }
-
-                res.status(403).send({ message: "Require staffGather Role!" });
-                return;
-            }
-        );
-    });
+        res.status(403).send({ message: "Require staffGather Role!" });
+        return;
+      }
+    );
+  });
 };
 
 const authJWT = {
-    verifyToken,
-    isAdmin,
-    isManagerTrans,
-    isStaffTrans,
-    isManagerGather,
-    isStaffGather,
-    isUser,
+  verifyToken,
+  isAdmin,
+  isManagerTrans,
+  isStaffTrans,
+  isManagerGather,
+  isStaffGather,
+  isUser,
 };
 
 module.exports = authJWT;

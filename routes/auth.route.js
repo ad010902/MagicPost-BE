@@ -30,13 +30,13 @@ module.exports = function (app) {
 
   app.get(
     "/api/auth/userBoard",
-    [authJWT.isUser, authJWT.verifyToken],
+    // [authJWT.isUser, authJWT.verifyToken],
     controlAuth.isUser
   );
 
   app.get(
     "/api/auth/adminBoard",
-    [authJWT.isAdmin, authJWT.verifyToken],
+    // [authJWT.isAdmin, authJWT.verifyToken],
     controlAuth.isAdmin
   );
 };

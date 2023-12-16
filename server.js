@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieSession = require("cookie-session");
 
 const dbConfig = require("./config/db.config");
 //const cookieSession = require("cookie-session");
@@ -17,14 +18,13 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-// app.use(
-//   cookieSession({
-//     name: "bezkoder-session",
-//     keys: ["COOKIE_SECRET"], // should use as secret environment variable
-//     httpOnly: true,
-//     sameSite: "strict",
-//   })
-// );
+app.use(
+  cookieSession({
+    name: "be-session",
+    keys: ["COOKIE_SECRET"], // should use as secret environment variable
+    httpOnly: true,
+  })
+);
 
 const db = require("./models");
 const Role = db.role;
@@ -45,16 +45,13 @@ db.mongoose
   });
 
 // simple route
-//app.get("/", (req, res) => {
-//res.json({ message: "Welcome to bezkoder application." });
-//});
 
 // routes
 require("./routes/auth.route")(app);
 //require("./routes/user.route")(app);
 require("./routes/gatheringLocation.route")(app);
-// require("./routes/transactionLocation.route")(app);
-//require("./routes/order.route")(app);
+require("./routes/transactionLocation.route")(app);
+require("./routes/order.route")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

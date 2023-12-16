@@ -10,9 +10,9 @@ const TransactionLocation = db.TransactionLocation;
 exports.createOrderOrigin = (req, res) => {
   //Valid request
   /*if (!req.body.nameGather) {
-                                                                res.status(400).send({ message: "Content can not be empty!" });
-                                                                return;
-                                                              }*/
+                                                                    res.status(400).send({ message: "Content can not be empty!" });
+                                                                    return;
+                                                                  }*/
   //create a order
   const order = new Order({
     idOrder: req.body.String,
@@ -95,14 +95,13 @@ exports.createOrderToGatherF = (req, res) => {
   }
 
   const orderToGatherF = new Order({
-    idOrder: req.name.isOrder,
+    idOrder: req.body.isOrder,
     name: req.body.name,
     title: req.body.title,
     gatherLocaStartName: req.body.gatherLocaStartName,
     gatherLocaEndName: req.body.gatherLocaEndName,
     statusGatherF: req.body.statusGatherF,
   });
-
   //
   orderToGatherF
     .save(orderToGatherF)
