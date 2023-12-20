@@ -48,7 +48,7 @@ db.mongoose
 
 // routes
 require("./routes/auth.route")(app);
-//require("./routes/user.route")(app);
+require("./routes/user.route")(app);
 require("./routes/gatheringLocation.route")(app);
 require("./routes/transactionLocation.route")(app);
 require("./routes/order.route")(app);
@@ -60,21 +60,20 @@ app.listen(PORT, () => {
 });
 
 // function initial() {
-//   Role.create({
-//     id: 1,
-//     name: "user",
-//   });
+//     Role.create({
+//         id: 1,
+//         name: "user",
+//     });
 
-//   Role.create({
-//     id: 2,
-//     name: "staffGather",
-//   });
+//     Role.create({
+//         id: 2,
+//         name: "staffGather",
+//     });
 
-//   Role.create({
-//     id: 3,
-//     name: "managerGather",
-//   });
-
+//     Role.create({
+//         id: 3,
+//         name: "managerGather",
+//     });
 //   Role.create({
 //     id: 4,
 //     name: "staffTrans",

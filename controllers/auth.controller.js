@@ -2,7 +2,6 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
-
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 // const hashGenK = bcrypt.genSalt(8);
@@ -49,7 +48,7 @@ exports.signup = (req, res) => {
           return;
         }
 
-        user.roles = [role._id];
+        user.roles = role._id;
         user.save((err) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -62,7 +61,6 @@ exports.signup = (req, res) => {
     }
   });
 };
-
 exports.signin = (req, res) => {
   User.findOne({
     username: req.body.username,
@@ -85,6 +83,7 @@ exports.signin = (req, res) => {
 
       if (!passwordIsValid) {
         return res.status(401).send({
+          accessToken: null,
           message: "Invalid Password!",
         });
       }
@@ -100,13 +99,13 @@ exports.signin = (req, res) => {
       //   authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       // }
 
-      req.session.token = token;
+      //req.session.token = token;
 
       res.status(200).send({
         id: user._id,
         username: user.username,
         email: user.email,
-        // roles: authorities,
+        accessToken: token,
         role: user.roles,
         message: "Signin successfully!",
       });

@@ -1,37 +1,28 @@
 const db = require("../models");
 const GatheringLocation = db.GatheringLocation;
 const Order = db.order;
+const OrderHistory = db.orderHistory;
 const EmailService = require("../services/email.service");
 //const Role = db.role;
 const TransactionLocation = db.TransactionLocation;
 
-//Create order carefully, notiable pls
-// Create user before creating order.
 exports.createOrderOrigin = (req, res) => {
-  //Valid request
-  /*if (!req.body.nameGather) {
-                                                                    res.status(400).send({ message: "Content can not be empty!" });
-                                                                    return;
-                                                                  }*/
-  //create a order
   const order = new Order({
-    idOrder: req.body.String,
     name: req.body.name,
     title: req.body.title,
     receiveIf: req.body.receiveIf,
     sendIf: req.body.sendIf,
-    //
+    addressIfR: req.body.addressIfR,
+    addressIfS: req.body.addressIfS,
     typeOrder: req.body.typeOrder,
-    transLocaStart: req.body.transLocaStart,
-    transLocaEnd: req.body.transLocaEnd,
-    gatherLocaStart: req.body.gatherLocaStart,
-    gatherLocaEnd: req.body.gatherLocaEnd,
     contentValue: req.body.contentValue,
     describeOrder: req.body.describeOrder,
     specialService: req.body.specialService,
+    status: req.body.status,
     timeReceive: req.body.timeReceive, // Đi tìm kiểu dữ liệu của time.
     price: req.body.price, //Kiểu number trong js có được dùng thập phân, nó có thể chạy được từ đâu đến đâu
     paided: req.body.paided,
+    isDeliveSuccess: req.body.isDeliveSuccess,
   });
 
   //Save new order
@@ -42,9 +33,27 @@ exports.createOrderOrigin = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
+        message: err.message || "Some error ocurred while creating the order.",
+      });
+    });
+
+  const orderHistory = new OrderHistory({
+    orderName: req.body.orderName,
+    title: req.body.title,
+    transLocaStart: req.body.transLocaStart,
+    transLocaEnd: req.body.transLocaEnd,
+    status: req.body.status,
+  });
+
+  orderHistory
+    .save(orderHistory)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
         message:
-          err.message ||
-          "Some error ocurred while creating the gathering Location.",
+          err.message || "Some error ocurred while creating the order history.",
       });
     });
   // Automaticly update count after changing and creating
@@ -59,92 +68,6 @@ exports.createOrderOrigin = (req, res) => {
   //   },
   //   { new: true }
   // );
-};
-
-exports.createOrderToGatherS = (req, res) => {
-  if (!req.body.name) {
-    res.status(400).send({ message: "Order can be empty!" });
-    return;
-  }
-
-  const orderGatherS = new Order({
-    idOrder: req.name.idOrder,
-    name: req.body.name,
-    title: req.body.title,
-    transLocaEndName: req.body.transLocaEndName,
-    gatherLocaStartName: req.body.gatherLocaStartName,
-    statusGatherS: req.body.statusGatherS,
-  });
-  orderGatherS
-    .save(orderGatherS)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error ocurred while creating order to gatherEnd",
-      });
-    });
-};
-
-exports.createOrderToGatherF = (req, res) => {
-  if (!req.body.name) {
-    res.status(400).send({ message: "Order can be empty!" });
-    return;
-  }
-
-  const orderToGatherF = new Order({
-    idOrder: req.body.isOrder,
-    name: req.body.name,
-    title: req.body.title,
-    gatherLocaStartName: req.body.gatherLocaStartName,
-    gatherLocaEndName: req.body.gatherLocaEndName,
-    statusGatherF: req.body.statusGatherF,
-  });
-  //
-  orderToGatherF
-    .save(orderToGatherF)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error ocurred while creating order",
-      });
-    });
-};
-
-// Create order to TransF (diem dau)
-exports.createOrderToTransF = (req, res) => {
-  //Valid request
-  if (!req.body.name) {
-    res.status(400).send({ message: "Order can not be empty!" });
-    return;
-  }
-
-  //create a Order to startTransaction
-  const order = new Order({
-    idOrder: req.body.idOrder,
-    title: req.body.title,
-    name: req.body.name,
-    gatherLocaEndName: req.body.gatherLocaEndName,
-    transLocaEndName: req.body.transLocaEndName,
-    statusTransF: req.body.statusTransF,
-  });
-
-  //Save new order
-  order
-    .save(order)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error ocurred while creating the order to.",
-      });
-    });
 };
 
 //Find all list includes gathering Location according condition
@@ -166,6 +89,29 @@ exports.createOrderToTransF = (req, res) => {
       });
     });
 };*/
+//Ta
+exports.createOrderTransS = (req, res) => {
+  const orderHistory = new OrderHistory({
+    orderName: req.body.orderName,
+    title: req.body.title,
+    transLocaStart: req.body.transLocaStart,
+    gatherLocaStart: req.body.gatherLocaStart.name,
+    status: false,
+  });
+
+  //   //Save new order
+  orderHistory
+    .save(orderHistory)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error ocurred while creating the order to.",
+      });
+    });
+};
 
 exports.findOneOrder = (req, res) => {
   const id = req.params._id;
@@ -200,9 +146,9 @@ exports.updateOrder = (req, res) => {
       res.status(500).send({ message: "Error retrieving order with id" + id });
     });
 };
-// Find all order
+// Đưa ra tất cả các đơn đang chờ xác nhận đến điểm tập kết đầu tiên
 exports.findAllOrderGatherS = (req, res) => {
-  Order.find({ statusGatherS: false })
+  OrderHistory.find({ transLocaStart: User.nameTrans })
     .then((data) => {
       res.send(data);
     })

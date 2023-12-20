@@ -20,7 +20,7 @@ module.exports = function (app) {
   app.get(
     "/api/test/managerGather/",
     [authJWT.verifyToken, authJWT.isManagerGather],
-    controlUser.isManagerGather
+    controlUser.managerGatherBoard
   );
 
   app.get(
@@ -49,7 +49,7 @@ module.exports = function (app) {
 
   app.get(
     "/api/staffTrans/:name",
-    [authJWT.verifyToken, authJWT.authJwt.isManagerTrans],
+    [authJWT.verifyToken, authJWT.isManagerTrans],
     controlUser.findAllStaffTrans
   );
 

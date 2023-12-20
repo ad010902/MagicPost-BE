@@ -5,8 +5,8 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-  //let token = req.headers["x-access-token"];
-  let token = req.session.token;
+  let token = req.headers["x-access-token"];
+  //let token = req.session.token;
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
@@ -72,11 +72,9 @@ isManagerTrans = (req, res, next) => {
           return;
         }
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "managerTrans") {
-            next();
-            return;
-          }
+        if (roles.name === "managerTrans") {
+          next();
+          return;
         }
 
         res.status(403).send({ message: "Require ManagerTrans Role!" });
@@ -102,12 +100,9 @@ isStaffTrans = (req, res, next) => {
           res.status(500).send({ message: err });
           return;
         }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "staffTrans") {
-            next();
-            return;
-          }
+        if (roles[i].name === "staffTrans") {
+          next();
+          return;
         }
 
         res.status(403).send({ message: "Require StaffTrans Role!" });
@@ -134,11 +129,9 @@ isManagerGather = (req, res, next) => {
           return;
         }
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "managerGather") {
-            next();
-            return;
-          }
+        if (roles.name === "managerGather") {
+          next();
+          return;
         }
 
         res.status(403).send({ message: "Require ManagerGather Role!" });
@@ -165,11 +158,9 @@ isUser = (req, res, next) => {
           return;
         }
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "user") {
-            next();
-            return;
-          }
+        if (roles.name === "user") {
+          next();
+          return;
         }
 
         res.status(403).send({ message: "Require User Role!" });
@@ -196,11 +187,9 @@ isStaffGather = (req, res, next) => {
           return;
         }
 
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "staffGather") {
-            next();
-            return;
-          }
+        if (roles.name === "staffGather") {
+          next();
+          return;
         }
 
         res.status(403).send({ message: "Require staffGather Role!" });

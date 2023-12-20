@@ -7,9 +7,9 @@ module.exports = function (app) {
     next();
   });
   app.post("/api/order/createOrderOrigin", controlOrder.createOrderOrigin);
-  app.post("/api/order/createOrderGatherS", controlOrder.createOrderToGatherS);
-  app.post("/api/order/createOrderGatherF", controlOrder.createOrderToGatherF);
-  app.post("/api/order/createOrderTransF", controlOrder.createOrderToTransF);
+  app.post("/api/order/createOrderTransS", controlOrder.createOrderTransS);
+  // app.post("/api/order/createOrderGatherF", controlOrder.createOrderToGatherF);
+  // app.post("/api/order/createOrderTransF", controlOrder.createOrderToTransF);
   app.get("/api/order/findOneOrder", controlOrder.findOneOrder);
   app.get("/api/order/findAllOrderGatherS", controlOrder.findAllOrderGatherS);
   app.get("/api/order/findAllOrderGatherF", controlOrder.findAllOrderGatherF);
@@ -24,5 +24,7 @@ module.exports = function (app) {
     controlOrder.countOrderTransSuccessGatherNext
   );
   app.get("/api/order/countOrderReceive", controlOrder.countOrderReceive);
+
+  //Update status order.
   app.put("/api/order/updateOrder", controlOrder.updateOrder);
 };

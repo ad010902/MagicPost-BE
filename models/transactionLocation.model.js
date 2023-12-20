@@ -14,25 +14,21 @@ const TransactionLocation = mongoose.model(
     //cont order, which transaction doesn't cf
     countOrderF: Number,
     //ten cua truong diem giao dich
-    managerTrans: [
-      {
-        managerTransName: String,
-        managerTransID: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
+    managerTrans: {
+      managerTransName: String,
+      managerTransID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
-    ],
+    },
     //
-    gatherLocation: [
-      {
-        gatherLocationName: String,
-        gatherLocationID: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "GatheringLocation",
-        },
+    gatherLocation: {
+      gatherLocationName: String,
+      gatherLocationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "GatheringLocation",
       },
-    ],
+    },
   })
 );
 module.exports = TransactionLocation;

@@ -33,7 +33,6 @@ module.exports = function (app) {
     // [authJWT.isUser, authJWT.verifyToken],
     controlAuth.isUser
   );
-
   app.get(
     "/api/auth/adminBoard",
     // [authJWT.isAdmin, authJWT.verifyToken],
