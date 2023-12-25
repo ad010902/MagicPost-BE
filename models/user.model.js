@@ -11,12 +11,10 @@ const User = mongoose.model(
     nameTrans: String,
     nameGather: String,
     roleName: String,
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-      },
-    ],
+    roles: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+    },
   })
 );
 module.exports = User;
