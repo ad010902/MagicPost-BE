@@ -1,8 +1,11 @@
-// Tạo API tạo người nhân viên để quản lý, tạo nhân viên ở điểm giao dịch, điểm tập kết
 const db = require("../models");
-//const GatheringLocation = db.GatheringLocation
+const GatheringLocation = db.GatheringLocation;
+const TransactionLocation = db.TransactionLocation;
 const User = db.user;
 const Role = db.role;
+const Email = require("../services/email.service");
+var jwt = require("jsonwebtoken");
+var bcrypt = require("bcryptjs");
 
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content."); //Check current user
@@ -38,30 +41,66 @@ exports.showAllUser = (req, res) => {
     .catch((err) => res.json(err));
 };
 
+// Create admin
 exports.createUser = (req, res) => {
   //Valid request
-  if (!req.body.username) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
-
-  //create a user
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+    roleName: req.body.roleName,
+    nameTrans: req.body.nameTrans,
+    nameGather: req.body.nameGather,
   });
 
-  //Save new user
-  User.save(user)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error ocurred while creating the user.",
+  user.save((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    if (req.body.roles) {
+      Role.find(
+        {
+          name: { $in: req.body.roles },
+        },
+        (err, roles) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          user.roles = roles.map((role) => role._id);
+          user.save((err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+
+            //res.send({ message: "User was registered successfully!" });
+          });
+        }
+      );
+    } else {
+      Role.findOne({ name: user.roleName }, (err, role) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        user.roles = role._id;
+        user.save((err) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          //gửi mật khẩu và tài khoản về email.
+
+          res.send({ message: "Create user successfully!" });
+        });
       });
-    });
+    }
+  });
 };
 
 //tìm tất cả danh sách theo cái gì đây ????
@@ -158,8 +197,8 @@ exports.deleteAll = (req, res) => {
 
 // Find all according staffGather
 exports.findAllStaffGather = (req, res) => {
-  const name = req.params.name;
-  User.find({ nameGather: name })
+  //const name = req.params.name;
+  User.find({ roleName: "staffGather" })
     .then((data) => {
       res.send(data);
     })

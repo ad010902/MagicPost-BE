@@ -47,9 +47,9 @@ exports.createOrderOrigin = (req, res) => {
 
   orderHistory
     .save(orderHistory)
-    .then((data) => {
-      res.send(data);
-    })
+    // .then((data) => {
+    //   //res.send(data);
+    // })
     .catch((err) => {
       res.status(500).send({
         message:
@@ -94,7 +94,7 @@ exports.createOrderTransS = (req, res) => {
   const orderHistory = new OrderHistory({
     orderName: req.body.orderName,
     title: req.body.title,
-    transLocaStart: req.body.transLocaStart,
+    transLocaStart: req.body.transLocaStart.name,
     gatherLocaStart: req.body.gatherLocaStart.name,
     status: false,
   });
@@ -148,7 +148,7 @@ exports.updateOrder = (req, res) => {
 };
 // Đưa ra tất cả các đơn đang chờ xác nhận đến điểm tập kết đầu tiên
 exports.findAllOrderGatherS = (req, res) => {
-  OrderHistory.find({ transLocaStart: User.nameTrans })
+  OrderHistory.find()
     .then((data) => {
       res.send(data);
     })

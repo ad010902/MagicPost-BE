@@ -2,6 +2,7 @@ const { authJWT } = require("../middlewares");
 const { verifySignUp } = require("../middlewares");
 //const authJWT = require("../middlewares/authJWT");
 const controlAuth = require("../controllers/auth.controller");
+const controlUser = require("../controllers/user.controller");
 const controlEmail = require("../services/email.service");
 
 module.exports = function (app) {
@@ -27,6 +28,8 @@ module.exports = function (app) {
   app.post("/api/auth/signout", controlAuth.signout);
 
   app.post("/api/auth/sendAccount", controlEmail.createEmail);
+
+  app.post("/api/user/createUser", controlUser.createUser);
 
   app.get(
     "/api/auth/userBoard",
